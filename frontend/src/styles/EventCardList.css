@@ -1,0 +1,42 @@
+/* EventCardList.css - Fixed grid layout to prevent overlap */
+
+.event-card-list {
+  display: grid;
+  /* Set explicit column width and prevent stretching with auto-fill */
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 2.5rem; /* Spacing between cards */
+  margin: 2rem auto;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0; /* Remove padding that was causing right shift */
+  justify-content: center; /* Center the grid */
+}
+
+/* Make sure cards in the last row don't stretch */
+.event-card-list::after {
+  content: '';
+  grid-column: 1 / -1;
+}
+
+/* Mobile view: stack cards vertically with proper spacing */
+@media (max-width: 768px) {
+  .event-card-list {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 0;
+  }
+}
+
+/* Tablet view: display 2 cards per row */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .event-card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Larger screens: maintain proper spacing */
+@media (min-width: 1025px) {
+  .event-card-list {
+    padding: 0;
+  }
+}
