@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "synthicalai"
+  },
+  "targets": {
+    "synthicalai": {
+      "hosting": {
+        "synthicalai": [
+          "synthicalai"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
