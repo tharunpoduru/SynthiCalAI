@@ -1,0 +1,41 @@
+# Node
+node_modules/
+
+# Builds
+frontend/dist/
+functions/lib/
+
+# Env files (exclude real env files but allow examples)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+functions/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Allow example files
+!.env.example
+!frontend/.env.example
+!functions/.env.example
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# MacOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
