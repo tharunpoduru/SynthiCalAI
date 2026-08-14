@@ -17,7 +17,11 @@ export function initAnalytics(measurementId) {
 
 export function logEvent(name, params = {}) {
   if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-    window.gtag('event', name, params);
+    try {
+      window.gtag('event', name, params);
+    } catch (e) {
+      // Silently ignore gtag errors (often caused by browser extensions)
+    }
     return true;
   }
   return false;

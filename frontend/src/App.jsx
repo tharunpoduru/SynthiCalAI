@@ -55,7 +55,7 @@ export default function App() {
   }
 
   const processFile = async (e) => {
-    e.preventDefault()
+    if (e && e.preventDefault) e.preventDefault()
     if (!file) return
     // 25 MB limit UI validation
     if (file.size > 25 * 1024 * 1024) { setError('File too large (max 25 MB).'); return }

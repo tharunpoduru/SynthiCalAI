@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 const API_ROOT = "https://generativelanguage.googleapis.com";
 
 /**
- * Upload a file to Gemini Files API and extract events using gemini-3-pro-preview.
+ * Upload a file to Gemini Files API and extract events using gemini-3.7-flash.
  * Accepts raw bytes via multer (memoryStorage) as req.file.
  */
 export async function processUploadedFile(file, userTimeZone) {
@@ -71,11 +71,11 @@ export async function processUploadedFile(file, userTimeZone) {
   const nowUtc = new Date().toISOString();
   const tz = userTimeZone || 'Unknown';
   const prompt = `You are an expert event extraction assistant. Analyze the attached media (image/document/audio) and extract events. Output ONLY JSON: {"events": [ { "title": "...", "start_datetime": "UTC ISO", "end_datetime": "UTC ISO", "location": "...", "description": "..." } ]}. If there are no events, return {"events": []}. If end time is missing, set end_datetime = start + 1 hour.\n\nCurrent date/time (UTC): ${nowUtc}\nUser timezone: ${tz}\nUse these values to resolve any relative dates like "today", "tomorrow", "next Friday". Convert all JSON datetime values to UTC ISO.`;
-  const genResp = await fetch(`${API_ROOT}/v1beta/models/gemini-3-pro-preview:generateContent`, {
+  const genResp = await fetch(`${API_ROOT}/v1beta/models/gemini-3.7-flash:generateContent`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Goog-Api-Key": apiKey },
     body: JSON.stringify({
-      contents: [{ parts: [ { text: prompt }, { file_data: { mime_type: baseMime, file_uri: fileUri } } ] }],
+      contents: [{ parts: [{ text: prompt }, { file_data: { mime_type: baseMime, file_uri: fileUri } }] }],
       generationConfig: { responseMimeType: "application/json" }
     })
   });
@@ -86,10 +86,10 @@ export async function processUploadedFile(file, userTimeZone) {
   const gen = await genResp.json();
   const txt = gen?.candidates?.[0]?.content?.parts?.[0]?.text || "{}";
   let parsed = { events: [] };
-  try { parsed = JSON.parse(txt); } catch {}
+  try { parsed = JSON.parse(txt); } catch { }
 
   // 5) Cleanup (best effort)
-  try { await fetch(`${API_ROOT}/v1beta/${fileName}`, { method: "DELETE", headers: { "X-Goog-Api-Key": apiKey } }); } catch {}
+  try { await fetch(`${API_ROOT}/v1beta/${fileName}`, { method: "DELETE", headers: { "X-Goog-Api-Key": apiKey } }); } catch { }
 
   return Array.isArray(parsed) ? parsed : (parsed.events || []);
 }
