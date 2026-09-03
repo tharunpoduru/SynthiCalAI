@@ -3,7 +3,7 @@ import fetch from "node-fetch";
 const API_ROOT = "https://generativelanguage.googleapis.com";
 
 /**
- * Upload a file to Gemini Files API and extract events using gemini-3.7-flash.
+ * Upload a file to Gemini Files API and extract events using gemini-3.8-flash.
  * Accepts raw bytes via multer (memoryStorage) as req.file.
  */
 export async function processUploadedFile(file, userTimeZone) {
@@ -71,7 +71,7 @@ export async function processUploadedFile(file, userTimeZone) {
   const nowUtc = new Date().toISOString();
   const tz = userTimeZone || 'Unknown';
   const prompt = `You are an expert event extraction assistant. Analyze the attached media (image/document/audio) and extract events. Output ONLY JSON: {"events": [ { "title": "...", "start_datetime": "UTC ISO", "end_datetime": "UTC ISO", "location": "...", "description": "..." } ]}. If there are no events, return {"events": []}. If end time is missing, set end_datetime = start + 1 hour.\n\nCurrent date/time (UTC): ${nowUtc}\nUser timezone: ${tz}\nUse these values to resolve any relative dates like "today", "tomorrow", "next Friday". Convert all JSON datetime values to UTC ISO.`;
-  const genResp = await fetch(`${API_ROOT}/v1beta/models/gemini-3.7-flash:generateContent`, {
+  const genResp = await fetch(`${API_ROOT}/v1beta/models/gemini-3.8-flash:generateContent`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Goog-Api-Key": apiKey },
     body: JSON.stringify({
